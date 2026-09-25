@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y jq make automake autoconf libtool libmariadb-dev build-essential curl libmariadb-dev-compact
+        run: sudo apt-get update && sudo apt-get install -y jq make automake autoconf libtool libmariadb-dev build-essential curl libmariadb-dev-compat
 
       - name: Show toolchain
         run: | 
@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: |
           autoreconf -fvi
-          CFLAGS="-mavx2 -03" bash configure
+          CFLAGS="-mavx2 -O3" bash configure
           make
       - name: Show output
         run: |
