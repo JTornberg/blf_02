@@ -41,7 +41,7 @@ jobs:
       - name: Compile Coverity
         run: |
           autoreconf -fvi
-          CFLAGS="-mavx2 -03" bash configure
+          bash configure
           ${RUNNER_TEMP}/${{ env.COVERITY }}/bin/cov-build --dir ${RUNNER_TEMP}/cov-int make
           cd ${RUNNER_TEMP} && tar czvf ${{ vars.COVERITY_PROJECT_URL_ID }}.tgz cov-int
 
