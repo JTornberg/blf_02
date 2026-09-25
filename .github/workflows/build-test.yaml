@@ -1,0 +1,33 @@
+name: Build test
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq make automake autoconf libtool libmariadb-dev build-essential curl libmariadb-dev-compact
+
+      - name: Show toolchain
+        run: | 
+          autoconf --version | head -1
+          automake --version | head -1
+          libtool --version | head -1
+          gcc --version | head -1
+          which mysql_config
+          mysql_config --version
+          mysql_config --plugindir
+          mysql_config --cflags
+
+      - name: Build
+        run: |
+          autoreconf -fvi
+          CFLAGS="-mavx2 -03" bash configure
+          make
+      - name: Show output
+        run: |
+          ls -l .libs/
+          file .libs/lib_mysqludf_bloom.so
